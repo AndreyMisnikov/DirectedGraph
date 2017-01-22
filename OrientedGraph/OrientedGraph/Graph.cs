@@ -21,6 +21,11 @@ namespace OrientedGraph
             _vertices.Add(vertex);
         }
 
+        public Vertex GetVertexByName(string vertexName)
+        {
+            return _vertices.FirstOrDefault(vertex => vertex.Name == vertexName);
+        }
+
         public void AddEdge(Edge edge)
         {
             if (edge.StartVertexId == edge.EndVertexId) throw new ArgumentException("Start and End vertices must be different");
@@ -39,13 +44,13 @@ namespace OrientedGraph
                 }
             }
 
-            if (!isExistStartVertex) throw new ArgumentException("Start vertex is not existed in the graph");
-            if (!isExistEndVertex) throw new ArgumentException("End vertex is not existed in the graph");
+            if (!isExistStartVertex) throw new ArgumentException("Start vertex is not existed in the journey map");
+            if (!isExistEndVertex) throw new ArgumentException("End vertex is not existed in the journey map");
 
             _edges.Add(edge);
         }
 
-        public int GetDirectRouteLength(Vertex startVertex, Vertex endVertex)
+        public int GetDirectJourneyTime(Vertex startVertex, Vertex endVertex)
         {
             if (startVertex == null) throw new ArgumentNullException(nameof(startVertex));
             if (endVertex == null) throw new ArgumentNullException(nameof(endVertex));
@@ -54,7 +59,7 @@ namespace OrientedGraph
             {
                 if (edge.StartVertexId == startVertex.Id && edge.EndVertexId == endVertex.Id)
                 {
-                    return edge.TravelTime;
+                    return edge.JourneyTime;
                 }
             }
             throw new ArgumentException($"Journey {startVertex.Name} - {endVertex.Name} is invalid");
@@ -70,14 +75,14 @@ namespace OrientedGraph
         /// <returns>
         /// The<see cref="int"/> length of route.
         /// </returns>
-        public int GetRouteLength(IEnumerable<Vertex> vertices)
+        public int GetJourneyTime(IEnumerable<Vertex> vertices)
         {
             if (vertices == null || !vertices.Any()) throw new ArgumentException("There are no element in vertices object");
-            int travelTime = 0;
+            int journeyTime = 0;
 
             if (vertices.Count() == 1)
             {
-                return travelTime;
+                return journeyTime;
             }
 
             Vertex startVertex = vertices.First();
@@ -86,16 +91,16 @@ namespace OrientedGraph
             for (int i = 1; i < vertices.Count(); i++)
             {
                 endVertex = vertices.ElementAt(i);
-                travelTime += GetDirectRouteLength(startVertex, endVertex);
+                journeyTime += GetDirectJourneyTime(startVertex, endVertex);
 
                 startVertex = endVertex;
             }
-            return travelTime;
+            return journeyTime;
         }
 
-        public Vertex GetVertexByName(string vertexName)
+        public int GetShortestJourneyTime(Vertex startVertex, Vertex endVertex)
         {
-            return _vertices.FirstOrDefault(vertex => vertex.Name == vertexName);
+            throw new NotImplementedException();
         }
     }
 }

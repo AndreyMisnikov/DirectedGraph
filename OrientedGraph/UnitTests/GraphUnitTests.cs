@@ -63,7 +63,6 @@ namespace UnitTests
         {
             //Arrange
 
-
             //Act
             var vertex = DataForTesting.GetVertexByName(vertexName);
 
@@ -89,69 +88,69 @@ namespace UnitTests
         [Theory]
         [InlineData("Liverpool", "Casablanca", 3)]
         [InlineData("Liverpool", "Cape Town", 6)]
-        public void GetDirectRouteLength_Should_ReturnCorrectRouteLength(string startVertexName, string endVertexName, int expectedRouteLength)
+        public void GetDirectJourneyTime_Should_ReturnCorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
         {
             //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
             var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            int routeLength = DataForTesting.GetDirectRouteLength(startVertex, endVertex);
+            int journeyTime = DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
 
             //Assert
-            Assert.Equal(expectedRouteLength, routeLength);
+            Assert.Equal(expectedJourneyTime, journeyTime);
         }
 
         [Theory]
         [InlineData("Liverpool", "Casablanca", 9)]
         [InlineData("Liverpool", "Cape Town", 12)]
-        public void GetDirectRouteLength_Should_ReturnIncorrectRouteLength(string startVertexName, string endVertexName, int expectedRouteLength)
+        public void GetDirectJourneyTime_Should_ReturnIncorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
         {
             //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
             var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            int routeLength = DataForTesting.GetDirectRouteLength(startVertex, endVertex);
+            int journeyTime = DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
 
             //Assert
-            Assert.NotEqual(expectedRouteLength, routeLength);
+            Assert.NotEqual(expectedJourneyTime, journeyTime);
         }
 
         [Theory]
         [InlineData("Liverpool", "Cape Town 23")]
         [InlineData("Minsk", "Mogilev")]
-        public void GetDirectRouteLength_Should_ReturnArgumentNullException(string startVertexName, string endVertexName)
+        public void GetDirectJourneyTime_Should_ReturnArgumentNullException(string startVertexName, string endVertexName)
         {
             //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
             var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            Action getDirectRouteLength = () => DataForTesting.GetDirectRouteLength(startVertex, endVertex);
+            Action getDirectJourneyTime = () => DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
 
             //Assert
-            Assert.Throws<ArgumentNullException>(getDirectRouteLength);
+            Assert.Throws<ArgumentNullException>(getDirectJourneyTime);
         }
 
         [Theory]
         [InlineData("New York", "Casablanca")]
         [InlineData("Casablanca", "Buenos Aires")]
-        public void GetDirectRouteLength_Should_ReturnInvalidJourneyException(string startVertexName, string endVertexName)
+        public void GetDirectJourneyTime_Should_ReturnInvalidJourneyException(string startVertexName, string endVertexName)
         {
             //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
             var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            Action getDirectRouteLength = () => DataForTesting.GetDirectRouteLength(startVertex, endVertex);
+            Action getDirectJourneyTime = () => DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
 
             //Assert
-            Assert.Throws<ArgumentException>(getDirectRouteLength);
+            Assert.Throws<ArgumentException>(getDirectJourneyTime);
         }
 
 
-        public static IEnumerable<object[]> CorrectRoutesAndLengthTestData => new[]
+        public static IEnumerable<object[]> CorrectRoutesAndJourneyTimeTestData => new[]
         {
             new object[]
             {
@@ -179,8 +178,8 @@ namespace UnitTests
             }
         };
 
-        [Theory, MemberData(nameof(CorrectRoutesAndLengthTestData))]
-        public void GetRouteLength_Should_ReturnCorrectRouteLength(IEnumerable<string> verticesRoute, int expectedRouteLength)
+        [Theory, MemberData(nameof(CorrectRoutesAndJourneyTimeTestData))]
+        public void GetJourneyTime_Should_ReturnCorrectJourneyTime(IEnumerable<string> verticesRoute, int expectedJourneyTime)
         {
             //Arrange
             List<Vertex> vertices = new List<Vertex>();
@@ -190,13 +189,13 @@ namespace UnitTests
             }
 
             //Act
-            var routeLength = DataForTesting.GetRouteLength(vertices);
+            var journeyTime = DataForTesting.GetJourneyTime(vertices);
 
             //Assert
-            Assert.Equal(expectedRouteLength, routeLength);
+            Assert.Equal(expectedJourneyTime, journeyTime);
         }
 
-        public static IEnumerable<object[]> CorrectRoutesAndIncorrectLengthTestData => new[]
+        public static IEnumerable<object[]> CorrectRoutesAndIncorrectJourneyTimeTestData => new[]
         {
             new object[]
             {
@@ -224,8 +223,8 @@ namespace UnitTests
             }
         };
 
-        [Theory, MemberData(nameof(CorrectRoutesAndIncorrectLengthTestData))]
-        public void GetRouteLength_Should_ReturnIncorrectRouteLength(IEnumerable<string> verticesRoute, int expectedRouteLength)
+        [Theory, MemberData(nameof(CorrectRoutesAndIncorrectJourneyTimeTestData))]
+        public void GetJourneyTime_Should_ReturnIncorrectJourneyTime(IEnumerable<string> verticesRoute, int expectedJourneyTime)
         {
             //Arrange
             List<Vertex> vertices = new List<Vertex>();
@@ -235,10 +234,10 @@ namespace UnitTests
             }
 
             //Act
-            var routeLength = DataForTesting.GetRouteLength(vertices);
+            var journeyTime = DataForTesting.GetJourneyTime(vertices);
 
             //Assert
-            Assert.NotEqual(expectedRouteLength, routeLength);
+            Assert.NotEqual(expectedJourneyTime, journeyTime);
         }
 
 
@@ -270,7 +269,7 @@ namespace UnitTests
         };
 
         [Theory, MemberData(nameof(WrongRoutesTestData))]
-        public void GetRouteLength_Should_ReturnInvalidJourneyException(IEnumerable<string> verticesRoute)
+        public void GetJourneyTime_Should_ReturnInvalidJourneyException(IEnumerable<string> verticesRoute)
         {
             //Arrange
             List<Vertex> vertices = new List<Vertex>();
@@ -279,12 +278,45 @@ namespace UnitTests
                 vertices.Add(DataForTesting.GetVertexByName(vertex));
             }
 
-            Action getRouteLength = () => DataForTesting.GetRouteLength(vertices);
+            Action getJourneyTime = () => DataForTesting.GetJourneyTime(vertices);
 
             //Assert
-            Assert.Throws<ArgumentException>(getRouteLength);
+            Assert.Throws<ArgumentException>(getJourneyTime);
         }
 
 
+        [Theory]
+        [InlineData("Buenos Aires", "Liverpool", 8)]
+        [InlineData("New York", "New York", 0)]
+        public void GetShortesJourneyTime_Should_ReturnCorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
+        {
+            //Arrange
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
+
+            //Act
+            var journeyTime = DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
+
+            //Assert
+            Assert.Equal(expectedJourneyTime, journeyTime);
+        }
+
+        [Theory]
+        [InlineData("Buenos Aires", "Liverpool", 10)]
+        [InlineData("Buenos Aires", "Liverpool", 16)]
+        [InlineData("Buenos Aires", "Liverpool", 0)]
+        [InlineData("New York", "New York", 1)]
+        public void GetShortesJourneyTime_Should_ReturnIncorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
+        {
+            //Arrange
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
+
+            //Act
+            var journeyTime = DataForTesting.GetShortestJourneyTime(startVertex, endVertex);
+
+            //Assert
+            Assert.Equal(expectedJourneyTime, journeyTime);
+        }
     }
 }
