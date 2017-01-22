@@ -47,6 +47,9 @@ namespace OrientedGraph
 
         public int GetDirectRouteLength(Vertex startVertex, Vertex endVertex)
         {
+            if (startVertex == null) throw new ArgumentNullException(nameof(startVertex));
+            if (endVertex == null) throw new ArgumentNullException(nameof(endVertex));
+
             foreach (var edge in _edges)
             {
                 if (edge.StartVertexId == startVertex.Id && edge.EndVertexId == endVertex.Id)
@@ -54,8 +57,45 @@ namespace OrientedGraph
                     return edge.TravelTime;
                 }
             }
-            throw new ArgumentException("Journey is invalid");
+            throw new ArgumentException($"Journey {startVertex.Name} - {endVertex.Name} is invalid");
         }
 
+        /// <summary>
+        /// Gets route length.
+        /// </summary>
+        /// <param name="vertices">
+        /// The vertices ordered from the starting point to the end point
+        /// </param>
+        /// <exception cref="ArgumentException">There are no element in vertices object exception".</exception>
+        /// <returns>
+        /// The<see cref="int"/> length of route.
+        /// </returns>
+        public int GetRouteLength(IEnumerable<Vertex> vertices)
+        {
+            if (vertices == null || !vertices.Any()) throw new ArgumentException("There are no element in vertices object");
+            int travelTime = 0;
+
+            if (vertices.Count() == 1)
+            {
+                return travelTime;
+            }
+
+            Vertex startVertex = vertices.First();
+            Vertex endVertex = null;
+
+            for (int i = 1; i < vertices.Count(); i++)
+            {
+                endVertex = vertices.ElementAt(i);
+                travelTime += GetDirectRouteLength(startVertex, endVertex);
+
+                startVertex = endVertex;
+            }
+            return travelTime;
+        }
+
+        public Vertex GetVertexByName(string vertexName)
+        {
+            return _vertices.FirstOrDefault(vertex => vertex.Name == vertexName);
+        }
     }
 }

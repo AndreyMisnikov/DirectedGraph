@@ -68,8 +68,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GraphUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OrientedGraph\OrientedGraph.csproj">
