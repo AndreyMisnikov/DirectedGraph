@@ -318,5 +318,33 @@ namespace UnitTests
             //Assert
             Assert.Equal(expectedJourneyTime, journeyTime);
         }
+
+        [Theory]
+        [InlineData("Liverpool", 3, 2)]
+        [InlineData("New York", 3, 3)]
+        public void GetNumberOfRoutesWithReturnToPort_Should_ReturnCorrectJourneyRoutes(string startVertexName, int maxStops, int expectedJourneyRoutes)
+        {
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+
+            //Act
+            var journeyRoutes = DataForTesting.GetNumberOfRoutesWithReturnToPort(startVertex, maxStops);
+
+            //Assert
+            Assert.Equal(expectedJourneyRoutes, journeyRoutes);
+        }
+
+        [Theory]
+        [InlineData("Liverpool", 9, 2)]
+        [InlineData("New York", 4, 2)]
+        public void GetNumberOfRoutesWithReturnToPort_Should_ReturnIncorrectJourneyRoutes(string startVertexName, int maxStops, int expectedJourneyRoutes)
+        {
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+
+            //Act
+            var journeyRoutes = DataForTesting.GetNumberOfRoutesWithReturnToPort(startVertex, maxStops);
+
+            //Assert
+            Assert.Equal(expectedJourneyRoutes, journeyRoutes);
+        }
     }
 }

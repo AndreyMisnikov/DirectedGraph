@@ -102,5 +102,22 @@ namespace OrientedGraph
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Gets number of routes with return to port
+        /// </summary>
+        /// <param name="startVertex">
+        /// Start point of journey 
+        /// </param>
+        /// <param name="maxStops">
+        /// The maximum of stops without start port 
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> number of routes.
+        /// </returns>
+        public int GetNumberOfRoutesWithReturnToPort(Vertex startVertex, int maxStops)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
