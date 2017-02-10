@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrientedGraph
 {
-    public enum CompareOperationForStopsParam
+    public enum CompareOperationForLimitParam
     {
         Maximum,
         Exactly
@@ -33,21 +33,47 @@ namespace OrientedGraph
         /// <param name="limitOfStops">
         /// The stops without start point 
         /// </param>
-        /// <param name="compareOperationForStopsParam">
+        /// <param name="compareOperationForLimitParam">
         /// Additional param for comparing journey's way with count of the stops
         /// </param>
         /// <returns>
         /// The <see cref="int"/> number of routes.
         /// </returns>
-        public int GetNumberRoutes(Vertex startVertex, Vertex endVertex, int limitOfStops, CompareOperationForStopsParam compareOperationForStopsParam)
+        public int GetNumberRoutes(Vertex startVertex, Vertex endVertex, int limitOfStops, CompareOperationForLimitParam compareOperationForLimitParam)
         {
             int countRoutes = 0;
-            GetNextPoints(startVertex.Id, endVertex.Id, limitOfStops, compareOperationForStopsParam, 0, ref countRoutes);
+            GetNextPoints(startVertex.Id, endVertex.Id, limitOfStops, compareOperationForLimitParam, 0, ref countRoutes);
 
             return countRoutes;
         }
 
-        private void GetNextPoints(string currentVertexId, string endVertexId, int limitOfStops, CompareOperationForStopsParam compareOperationForStopsParam, int currentStops, ref int countRoutes)
+        /// <summary>
+        /// Gets number available routes. Return back to start point in journey is available.
+        /// </summary>
+        /// <param name="startVertex">
+        /// Start point of journey 
+        /// </param>
+        /// <param name="endVertex">
+        /// End point of journey 
+        /// </param>
+        /// <param name="limitJourneyTime">
+        /// The limit of journey time
+        /// </param>
+        /// <param name="compareOperationForLimitParam">
+        /// Additional param for comparing journey's way with count of the stops
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> number of routes.
+        /// </returns>
+        public int GetNumberRoutes(Vertex startVertex, Vertex endVertex, double limitJourneyTime, CompareOperationForLimitParam compareOperationForLimitParam)
+        {
+            int countRoutes = 0;
+            GetNextPoints(startVertex.Id, endVertex.Id, limitJourneyTime, compareOperationForLimitParam, 0, ref countRoutes);
+
+            return countRoutes;
+        }
+
+        private void GetNextPoints(string currentVertexId, string endVertexId, int limitOfStops, CompareOperationForLimitParam compareOperationForLimitParam, int currentStops, ref int countRoutes)
         {
             var nextEdges = _edges.First(item => item.Key == currentVertexId);
             if (currentStops > limitOfStops) return;
@@ -56,24 +82,43 @@ namespace OrientedGraph
             {
                 if (edge.EndVertexId == endVertexId)
                 {
-                    if (compareOperationForStopsParam == CompareOperationForStopsParam.Maximum)
+                    if (compareOperationForLimitParam == CompareOperationForLimitParam.Maximum && currentStops <= limitOfStops)
                     {
-                        if (currentStops <= limitOfStops)
-                        {
-                            countRoutes++;
-                        }
+                        countRoutes++;
                     }
-                    else
+                    else if (currentStops == limitOfStops)
                     {
-                        if (currentStops == limitOfStops)
-                        {
-                            countRoutes++;
-                            break;
-                        }
+                        countRoutes++;
+                        break;
                     }
                 }
-                if (edge == nextEdges.First()) currentStops++;
-                GetNextPoints(edge.EndVertexId, endVertexId, limitOfStops, compareOperationForStopsParam, currentStops, ref countRoutes);
+                GetNextPoints(edge.EndVertexId, endVertexId, limitOfStops, compareOperationForLimitParam, currentStops + 1, ref countRoutes);
+            }
+        }
+
+        private void GetNextPoints(string currentVertexId, string endVertexId, double limitJourneyTime, CompareOperationForLimitParam compareOperationForLimitParam, double currentJourneyTime, ref int countRoutes)
+        {
+            var nextEdges = _edges.First(item => item.Key == currentVertexId);
+            if (currentJourneyTime > limitJourneyTime) return;
+
+
+            foreach (var edge in nextEdges)
+            {
+                double newJourneyTime = currentJourneyTime + edge.JourneyTime;
+                if (edge.EndVertexId == endVertexId)
+                {
+                    if (compareOperationForLimitParam == CompareOperationForLimitParam.Maximum && newJourneyTime <= limitJourneyTime)
+                    {
+                            countRoutes++;
+                    }
+                    else if (newJourneyTime == limitJourneyTime)
+                    {
+                        countRoutes++;
+                        break;
+                    }
+                }
+
+                GetNextPoints(edge.EndVertexId, endVertexId, limitJourneyTime, compareOperationForLimitParam, newJourneyTime, ref countRoutes);
             }
         }
 

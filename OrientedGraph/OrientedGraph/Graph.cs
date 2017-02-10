@@ -125,16 +125,40 @@ namespace OrientedGraph
         /// <param name="limitOfStops">
         /// The stops without start point 
         /// </param>
-        /// <param name="compareOperationForStopsParam">
+        /// <param name="compareOperationForLimitParam">
         /// Additional param for comparing journey's way with count of the stops
         /// </param>
         /// <returns>
         /// The <see cref="int"/> number of routes.
         /// </returns>
-        public int GetNumberRoutes(Vertex startVertex, Vertex endVertex, int limitOfStops, CompareOperationForStopsParam compareOperationForStopsParam)
+        public int GetNumberRoutesByStops(Vertex startVertex, Vertex endVertex, int limitOfStops, CompareOperationForLimitParam compareOperationForLimitParam)
         {
             GraphHelper graphHelper = new GraphHelper(this);
-            return graphHelper.GetNumberRoutes(startVertex, endVertex, limitOfStops, compareOperationForStopsParam);
+            return graphHelper.GetNumberRoutes(startVertex, endVertex, limitOfStops, compareOperationForLimitParam);
+        }
+
+        /// <summary>
+        /// Gets number available routes. Return back to start point in journey is available.
+        /// </summary>
+        /// <param name="startVertex">
+        /// Start point of journey 
+        /// </param>
+        /// <param name="endVertex">
+        /// End point of journey 
+        /// </param>
+        /// <param name="limitJourneyTime">
+        /// The limit of journey time 
+        /// </param>
+        /// <param name="compareOperationForLimitParam">
+        /// Additional param for comparing journey's way with count of the stops
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> number of routes.
+        /// </returns>
+        public int GetNumberRoutesByJourneyTime(Vertex startVertex, Vertex endVertex, double limitJourneyTime, CompareOperationForLimitParam compareOperationForLimitParam)
+        {
+            GraphHelper graphHelper = new GraphHelper(this);
+            return graphHelper.GetNumberRoutes(startVertex, endVertex, limitJourneyTime, compareOperationForLimitParam);
         }
 
     }
