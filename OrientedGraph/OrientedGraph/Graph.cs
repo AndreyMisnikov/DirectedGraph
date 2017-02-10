@@ -114,20 +114,28 @@ namespace OrientedGraph
         }
 
         /// <summary>
-        /// Gets number of routes with return to port
+        /// Gets number available routes. Return back to start point in journey is available.
         /// </summary>
         /// <param name="startVertex">
         /// Start point of journey 
         /// </param>
-        /// <param name="maxStops">
-        /// The maximum of stops without start port 
+        /// <param name="endVertex">
+        /// End point of journey 
+        /// </param>
+        /// <param name="limitOfStops">
+        /// The stops without start point 
+        /// </param>
+        /// <param name="compareOperationForStopsParam">
+        /// Additional param for comparing journey's way with count of the stops
         /// </param>
         /// <returns>
         /// The <see cref="int"/> number of routes.
         /// </returns>
-        public int GetNumberOfRoutesWithReturnToPort(Vertex startVertex, int maxStops)
+        public int GetNumberRoutes(Vertex startVertex, Vertex endVertex, int limitOfStops, CompareOperationForStopsParam compareOperationForStopsParam)
         {
-            throw new NotImplementedException();
+            GraphHelper graphHelper = new GraphHelper(this);
+            return graphHelper.GetNumberRoutes(startVertex, endVertex, limitOfStops, compareOperationForStopsParam);
         }
+
     }
 }

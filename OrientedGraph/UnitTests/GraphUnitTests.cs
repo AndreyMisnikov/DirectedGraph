@@ -337,31 +337,45 @@ namespace UnitTests
         }
 
         [Theory]
-        [InlineData("Liverpool", 3, 2)]
-        [InlineData("New York", 3, 3)]
-        public void GetNumberOfRoutesWithReturnToPort_Should_ReturnCorrectJourneyRoutes(string startVertexName, int maxStops, int expectedJourneyRoutes)
+        [InlineData("Liverpool", "Liverpool", 3, "Maximum", 4)]
+        [InlineData("Buenos Aires", "Liverpool", 4, "Exactly", 3)]
+        [InlineData("New York", "New York", 3, "Maximum", 2)]
+        public void GetNumberOfRoutes_Should_ReturnCorrectJourneyRoutes(string startVertexName, string endVertexName, int limitOfStops, string compareOperationForStopsParam, int expectedCountRoutes)
         {
+            //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            var journeyRoutes = DataForTesting.GetNumberOfRoutesWithReturnToPort(startVertex, maxStops);
+            CompareOperationForStopsParam compareOperation;
+            Enum.TryParse(compareOperationForStopsParam, out compareOperation);
+            var journeyRoutes = DataForTesting.GetNumberRoutes(startVertex, endVertex, limitOfStops, compareOperation);
 
             //Assert
-            Assert.Equal(expectedJourneyRoutes, journeyRoutes);
+            Assert.Equal(expectedCountRoutes, journeyRoutes);
         }
 
         [Theory]
-        [InlineData("Liverpool", 9, 2)]
-        [InlineData("New York", 4, 2)]
-        public void GetNumberOfRoutesWithReturnToPort_Should_ReturnIncorrectJourneyRoutes(string startVertexName, int maxStops, int expectedJourneyRoutes)
+        [InlineData("Liverpool", "Liverpool", 9, "Maximum", 2)]
+        [InlineData("New York", "New York", 4, "Maximum", 2)] //3 expteceted
+        [InlineData("New York", "New York", 3, "Exactly", 2)] //1
+        [InlineData("Buenos Aires", "New York", 1, "Exactly", 2)] //1
+        [InlineData("Buenos Aires", "New York", 1, "Maximum", 3)] //2
+        [InlineData("Buenos Aires", "New York", 1, "Exactly", 0)] //1
+        [InlineData("Buenos Aires", "New York", 1, "Maximum", 0)] //2
+        public void GetNumberOfRoutes_Should_ReturnIncorrectJourneyRoutes(string startVertexName, string endVertexName, int limitOfStops, string compareOperationForStopsParam, int expectedCountRoutes)
         {
+            //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
 
             //Act
-            var journeyRoutes = DataForTesting.GetNumberOfRoutesWithReturnToPort(startVertex, maxStops);
+            CompareOperationForStopsParam compareOperation;
+            Enum.TryParse(compareOperationForStopsParam, out compareOperation);
+            var journeyRoutes = DataForTesting.GetNumberRoutes(startVertex, endVertex, limitOfStops, compareOperation);
 
             //Assert
-            Assert.Equal(expectedJourneyRoutes, journeyRoutes);
+            Assert.NotEqual(expectedCountRoutes, journeyRoutes);
         }
     }
 }
