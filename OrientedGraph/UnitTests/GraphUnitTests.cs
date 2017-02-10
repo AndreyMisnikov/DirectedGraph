@@ -278,6 +278,7 @@ namespace UnitTests
                 vertices.Add(DataForTesting.GetVertexByName(vertex));
             }
 
+            //Act
             Action getJourneyTime = () => DataForTesting.GetJourneyTime(vertices);
 
             //Assert
@@ -287,26 +288,9 @@ namespace UnitTests
 
         [Theory]
         [InlineData("Buenos Aires", "Liverpool", 8)]
+        [InlineData("Cape Town", "Casablanca", 15)]
         [InlineData("New York", "New York", 0)]
-        public void GetShortesJourneyTime_Should_ReturnCorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
-        {
-            //Arrange
-            var startVertex = DataForTesting.GetVertexByName(startVertexName);
-            var endVertex = DataForTesting.GetVertexByName(endVertexName);
-
-            //Act
-            var journeyTime = DataForTesting.GetDirectJourneyTime(startVertex, endVertex);
-
-            //Assert
-            Assert.Equal(expectedJourneyTime, journeyTime);
-        }
-
-        [Theory]
-        [InlineData("Buenos Aires", "Liverpool", 10)]
-        [InlineData("Buenos Aires", "Liverpool", 16)]
-        [InlineData("Buenos Aires", "Liverpool", 0)]
-        [InlineData("New York", "New York", 1)]
-        public void GetShortesJourneyTime_Should_ReturnIncorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
+        public void GetShortestJourneyTime_Should_ReturnCorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
         {
             //Arrange
             var startVertex = DataForTesting.GetVertexByName(startVertexName);
@@ -317,6 +301,39 @@ namespace UnitTests
 
             //Assert
             Assert.Equal(expectedJourneyTime, journeyTime);
+        }
+
+        [Theory]
+        [InlineData("Buenos Aires", "Liverpool", 10)]
+        [InlineData("Buenos Aires", "Liverpool", 16)]
+        [InlineData("Buenos Aires", "Liverpool", 0)]
+        [InlineData("New York", "New York", 1)]
+        public void GetShortestJourneyTime_Should_ReturnIncorrectJourneyTime(string startVertexName, string endVertexName, int expectedJourneyTime)
+        {
+            //Arrange
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
+
+            //Act
+            var journeyTime = DataForTesting.GetShortestJourneyTime(startVertex, endVertex);
+
+            //Assert
+            Assert.NotEqual(expectedJourneyTime, journeyTime);
+        }
+
+        [Theory]
+        [InlineData("Cape Town", "Buenos Aires")]
+        public void GetShortestJourneyTime_Should_ReturnInvalidJourneyException(string startVertexName, string endVertexName)
+        {
+            //Arrange
+            var startVertex = DataForTesting.GetVertexByName(startVertexName);
+            var endVertex = DataForTesting.GetVertexByName(endVertexName);
+
+            //Act
+            Action getJourneyTime = () => DataForTesting.GetShortestJourneyTime(startVertex, endVertex);
+
+            //Assert
+            Assert.Throws<ArgumentException>(getJourneyTime);
         }
 
         [Theory]

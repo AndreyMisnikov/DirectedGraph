@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OrientedGraph.Dijkstra;
 
 namespace OrientedGraph
 {
@@ -50,6 +51,10 @@ namespace OrientedGraph
             _edges.Add(edge);
         }
 
+        public IEnumerable<Vertex> Vertices => _vertices;
+
+        public IEnumerable<Edge> Edges => _edges;
+
         public int GetDirectJourneyTime(Vertex startVertex, Vertex endVertex)
         {
             if (startVertex == null) throw new ArgumentNullException(nameof(startVertex));
@@ -98,9 +103,14 @@ namespace OrientedGraph
             return journeyTime;
         }
 
-        public int GetShortestJourneyTime(Vertex startVertex, Vertex endVertex)
+        public double GetShortestJourneyTime(Vertex startVertex, Vertex endVertex)
         {
-            throw new NotImplementedException();
+            if (startVertex == null) throw new ArgumentNullException(nameof(startVertex));
+            if (endVertex == null) throw new ArgumentNullException(nameof(endVertex));
+            if (startVertex == endVertex) return 0;
+
+            DijkstraAlgoritm diyDijkstraAlgoritm = new DijkstraAlgoritm(this);
+            return diyDijkstraAlgoritm.GetShortestJourneyTime(startVertex, endVertex);
         }
 
         /// <summary>

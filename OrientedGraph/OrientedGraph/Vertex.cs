@@ -2,7 +2,7 @@
 
 namespace OrientedGraph
 {
-    public class Vertex
+    public class Vertex : IVertex
     {
         public Vertex(string name)
         {
